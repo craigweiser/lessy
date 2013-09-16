@@ -31,7 +31,12 @@ class LessyServiceProvider extends ServiceProvider {
 			// Compiles less file if manual_compile_only is not enabled
 			if (! $this->app['config']->get('lessy::manual_compile_only'))
 			{
-				$lessy->compileLessFiles();
+                // compiles and caches the less files into a single css file
+                if($this->app['config']->get('lessy::single_file')) {
+                    $lessy->cachedCompileLessFile();
+                } else {
+                    $lessy->compileLessFiles();
+                }
 			}
 		}
 	}

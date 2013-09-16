@@ -183,4 +183,52 @@ class Lessy
         );
     }
 
+    /**
+     * complies and caches the less files into one css file
+     */
+    public function cachedCompileLessFile()
+    {
+
+        $root = $this->_app['path'] . '/';
+        $inputFile = $this->_app['config']->get('lessy::originFile');
+        $outputFile = $this->_app['config']->get('lessy::destinationFile');
+
+        if (empty($inputFile))
+            $inputFile = 'less/main.less';
+
+        if (empty($outputFile))
+            $outputFile = '../public/assets/css/main.css';
+
+        $inputFile = $root . $inputFile;
+        $outputFile = $root . $outputFile;
+
+        // cachedCompile method takes an optional second argument, $force.
+        // Passing in true will cause the input to always be recompiled.
+        $force = false;
+
+        // lessjs (default) — Same style used in LESS for JavaScript
+        // compressed — Compresses all the unrequired whitespace
+        // classic — lessphp’s original formatter
+        $formatter = $this->_app['config']->get('lessy::formatter');
+
+        // load the cache
+        $cacheFile = $inputFile . ".cache";
+
+        if (file_exists($cacheFile)) {
+            $cache = unserialize(file_get_contents($cacheFile));
+        } else {
+            $cache = $inputFile;
+        }
+
+        $less = new lessc;
+        $less->setFormatter($formatter);
+
+        $newCache = $less->cachedCompile($cache, $force);
+
+        if (!is_array($cache) || $newCache["updated"] > $cache["updated"]) {
+            file_put_contents($cacheFile, serialize($newCache));
+            file_put_contents($outputFile, $newCache['compiled']);
+        }
+    }
+
 }

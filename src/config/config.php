@@ -12,10 +12,9 @@ return array(
     |
     */
 
-    'origin'        => 'less',
+    'origin'          => 'less',
 
-    'destination'   => '../public/assets/css',
-
+    'destination'     => '../public/assets/css',
 
     /*
     |--------------------------------------------------------------------------
@@ -45,5 +44,26 @@ return array(
     */
 
     'manual_compile_only' => false,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Singe File
+    |--------------------------------------------------------------------------
+    |
+    | This option will force all less output into a single file and cache it.
+    |
+    */
+
+    'single_file'     => 'false',
+
+    // source file responisble for glueing together the less files into a single
+    // css output file
+    'originFile'      => 'less/main.less',
+
+    // file to be compiled from the less source files
+    'destinationFile' => '../public/assets/css/main.css',
+
+    // the formatting for the outputted css file
+    'formatter'       => 'lessjs',
 
 );
